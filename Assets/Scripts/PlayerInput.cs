@@ -95,7 +95,7 @@ public class PlayerInput : MonoBehaviour
         Vector3 camRelativeMove = camFwdRelative + camRgtRelative;
         camRelativeMove.y = 0.0f;
 
-        return camRelativeMove;
+        return camRelativeMove.normalized;
     }
 
     public void TeleportTo (Vector3 destination)
