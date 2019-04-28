@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/RS/lightingTest02001RS.unity
+    guid: 6291ccd31bccdb8408406f03f5e6e65d
   m_configObjects: {}

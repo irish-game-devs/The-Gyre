@@ -11,6 +11,7 @@ public class PlayerInput : MonoBehaviour
     private float rotSpeed = 8.0f;
 
     private Transform tf;
+    private Transform playCamTf;
 
     private const string horInputTwo = "HorizontalTwo";
     private const string verInputTwo = "VerticalTwo";
@@ -21,6 +22,7 @@ public class PlayerInput : MonoBehaviour
     private float   usingControllerMax = 1.0f;
 
     private CharMotor motor;
+    private PlayerCam playCam;
 
     private void Awake()
     {
@@ -28,9 +30,15 @@ public class PlayerInput : MonoBehaviour
         motor = GetComponent<CharMotor>();
     }
 
+    private void Start()
+    {
+        playCamTf = GameObject.Find("Main Camera").GetComponent<Transform>();
+        playCam = playCamTf.GetComponent<PlayerCam>();
+    }
+
     // Update is called once per frame
     void Update()
-    {
+    {   // Make this camera-relative?
         Vector3 desiredMoveDir = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
 
         Vector3 desiredLookDir = new Vector3(Input.GetAxisRaw(horInputTwo), 0.0f, Input.GetAxisRaw(verInputTwo));
@@ -39,7 +47,7 @@ public class PlayerInput : MonoBehaviour
 
         HandleFacing(desiredMoveDir, desiredLookDir, mouseMovement);
 
-        Vector3 desiredMove = desiredMoveDir * moveSpeed * Time.deltaTime;
+        Vector3 desiredMove = MakeDirectionCamRelative(desiredMoveDir) * moveSpeed * Time.deltaTime;
 
         motor.ReceiveInput(desiredMove, facing);
     }
@@ -62,7 +70,7 @@ public class PlayerInput : MonoBehaviour
         else if (Mathf.Abs(desiredLookDir.x) >= 0.001f || Mathf.Abs(desiredLookDir.z) >= 0.001f)
         {
             usingControllerTimer = 0.0f;
-            facing = desiredLookDir;
+            facing = MakeDirectionCamRelative(desiredLookDir);
         }
         else if (Mathf.Abs(desiredMoveDir.x) >= 0.001f || Mathf.Abs(desiredMoveDir.z) >= 0.001f)
         {
@@ -72,10 +80,29 @@ public class PlayerInput : MonoBehaviour
             }
             else
             {
-                facing = desiredMoveDir; // Possibly rotateTowards this point with high speed, just to add a little smoothness
+                facing = MakeDirectionCamRelative(desiredMoveDir);
             }
         }
 
         facing = Vector3.RotateTowards(tf.forward, facing, rotSpeed * Time.deltaTime, 0.0f);
     }
+
+    Vector3 MakeDirectionCamRelative (Vector3 direction)
+    {
+        Vector3 camFwdRelative = playCamTf.forward.normalized * direction.z;
+        Vector3 camRgtRelative = playCamTf.right.normalized * direction.x;
+
+        Vector3 camRelativeMove = camFwdRelative + camRgtRelative;
+        camRelativeMove.y = 0.0f;
+
+        return camRelativeMove;
+    }
+
+    public void TeleportTo (Vector3 destination)
+    {
+        tf.position = destination;
+        playCam.TeleportTo(destination);
+    }
 }
+
+// Multiple Camera Angles - 30, 45, 75, 90
