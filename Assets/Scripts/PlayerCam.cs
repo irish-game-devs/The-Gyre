@@ -31,21 +31,10 @@ public class PlayerCam : MonoBehaviour
 
     private void FixedUpdate()
     {
-        targetPosition = playerTF.position + cameraOffsetFromPlayer;
+        targetPosition = playerTF.position + playerTF.forward + cameraOffsetFromPlayer;
 
         Vector3 desiredMove = Vector3.Lerp(rb.position, targetPosition, moveSpeed * Time.deltaTime);
 
         rb.MovePosition(desiredMove);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void LateUpdate()
-    {
-        
     }
 }
