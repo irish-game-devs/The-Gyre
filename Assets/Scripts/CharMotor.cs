@@ -18,10 +18,10 @@ public class CharMotor : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {   
+    {
         rb.MovePosition(rb.position + desiredMove);
-        
-        if(facing.magnitude > 0.001f) rb.MoveRotation(Quaternion.LookRotation(facing));
+
+        if (facing.magnitude > 0.001f) rb.MoveRotation(Quaternion.LookRotation(facing));
 
         rb.angularVelocity = Vector3.zero;
     }

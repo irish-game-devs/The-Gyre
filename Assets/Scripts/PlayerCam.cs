@@ -38,7 +38,7 @@ public class PlayerCam : MonoBehaviour
         rb.MovePosition(desiredMove);
     }
 
-    public void TeleportTo(Vector3 destination)
+    public void TeleportPlayCamTo(Vector3 destination)
     {
         tf.position = destination + playerTF.forward + cameraOffsetFromPlayer;
     }

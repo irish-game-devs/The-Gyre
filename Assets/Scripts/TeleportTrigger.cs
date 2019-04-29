@@ -10,7 +10,7 @@ public class TeleportTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerInput>().TeleportTo(destination.position);
+            other.GetComponent<PlayerInput>().TeleportPlayerTo(destination.position);
         }
     }
 }
