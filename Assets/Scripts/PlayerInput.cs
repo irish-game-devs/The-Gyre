@@ -6,6 +6,9 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField]
+    private bool stefano = false;
+
+    [SerializeField]
     private float moveSpeed = 1.0f;
     [SerializeField]
     private float rotSpeed = 8.0f;
@@ -64,14 +67,12 @@ public class PlayerInput : MonoBehaviour
         {
             usingControllerTimer = usingControllerMax;
             Vector3 mousePos = Input.mousePosition;
-            Vector3 mousePosWorld = Camera.main.ScreenToWorldPoint(mousePos);
-            Ray ray = Camera.main.ScreenPointToRay(mousePos);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit, 128.0f))
-            {
-                Vector3 desiredLookDirMouse = raycastHit.point - tf.position;
-                desiredLookDirMouse = new Vector3(desiredLookDirMouse.x, 0.0f, desiredLookDirMouse.z);
-                facing = desiredLookDirMouse;
-            }
+            mousePos.z = Vector3.Distance(playCamTf.position, tf.position);
+
+            Vector3 v3 = Camera.main.ScreenToWorldPoint(mousePos);
+            Vector3 desiredLookDirMouse = v3 - tf.position;
+
+            facing = MakeDirectionCamRelative(desiredLookDirMouse);
         }
         else if (Mathf.Abs(desiredLookDir.x) >= 0.001f || Mathf.Abs(desiredLookDir.z) >= 0.001f)
         {
