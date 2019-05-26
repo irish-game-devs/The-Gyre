@@ -473,7 +473,7 @@ GameObject:
   m_Layer: 0
   m_Name: CubeSmooth
   m_TagString: Untagged
-  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2268,7 +2268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 1, b: 0.60596025, a: 0.2509804}
+  m_Color: {r: 0.881, g: 1, b: 0.90629923, a: 0.2509804}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3997,6 +3997,7 @@ GameObject:
   - component: {fileID: 192256164}
   - component: {fileID: 192256168}
   - component: {fileID: 192256167}
+  - component: {fileID: 192256169}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4098,6 +4099,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
+--- !u!114 &192256169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192256163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 18e69c6cb9606ef4a81b1f76eb1692bd, type: 2}
 --- !u!1001 &193194403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16774,7 +16788,7 @@ GameObject:
   m_Layer: 0
   m_Name: CubeRaw
   m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -17071,7 +17085,7 @@ GameObject:
   m_Layer: 0
   m_Name: TeleportDestination (2)
   m_TagString: Untagged
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -18825,7 +18839,7 @@ GameObject:
   m_Layer: 0
   m_Name: TeleportDestination
   m_TagString: Untagged
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -35790,7 +35804,7 @@ GameObject:
   m_Layer: 0
   m_Name: TeleportDestination (1)
   m_TagString: Untagged
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -43624,7 +43638,7 @@ GameObject:
   m_Layer: 0
   m_Name: TeleportDestination (3)
   m_TagString: Untagged
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
