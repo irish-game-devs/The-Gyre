@@ -6,9 +6,6 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField]
-    private bool stefano = false;
-
-    [SerializeField]
     private float moveSpeed = 1.0f;
     [SerializeField]
     private float rotSpeed = 8.0f;
@@ -57,7 +54,9 @@ public class PlayerInput : MonoBehaviour
             desiredMove = MakeDirectionCamRelative(desiredMoveDir).normalized * moveSpeed * Time.deltaTime;
             // desiredMove = desiredMoveDir.normalized * moveSpeed * Time.deltaTime;
         }
-        
+
+        motor.dash.SetStatus(motor.dash.DashCheck(desiredMove));
+
         motor.ReceiveInput(desiredMove, facing);
     }
 
@@ -113,3 +112,4 @@ public class PlayerInput : MonoBehaviour
 }
 
 // Multiple Camera Angles - 30, 45, 75, 90
+
