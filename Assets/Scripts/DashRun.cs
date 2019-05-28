@@ -61,6 +61,9 @@ public class DashRun : MonoBehaviour
         tf = GetComponent<Transform>();
         dashTimer = dashLenght;
         coolDownTimer = coolDownLenght;
+        runTimer = runLenght;
+        runCoolDownTimer = runCoolDownLenght;
+        spinTimer = spinLenght;
         initialRotation = tf.rotation;
     }
 
