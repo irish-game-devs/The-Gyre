@@ -98,7 +98,7 @@ public class DashRun : MonoBehaviour
         dashDestination = direction * dashStrenght;
     }
 
-    public Status DashCheck(Vector3 desiredMove)
+    public Status StatusUpdate(Vector3 desiredMove)
     {
         this.desiredMove = desiredMove;
         Status status = this.status;
@@ -194,6 +194,7 @@ public class DashRun : MonoBehaviour
                 }
                 break;
         }
+        this.status = status;
         return status;
     }
 
