@@ -14,9 +14,9 @@ public class CharMotor : MonoBehaviour
 
     // PLAYERINPUTS VARIABLES
     private float usingControllerTimer = 0.0f;
-    private float usingControllerMax = 1.0f;
+    private float usingControllerTimerLength = 1.0f;
     [SerializeField]
-    public float moveSpeed = 1.0f;
+    public float moveSpeed = 3.0f;
     [SerializeField]
     private float rotSpeed = 8.0f;
     private PlayerCam playCam;
@@ -43,22 +43,22 @@ public class CharMotor : MonoBehaviour
     {
         Vector3 move = desiredMove;
 
-        move = dash.DashModifier(move);
+        move = dash.MovementModifier(move);
         Vector3 target_pos = rb.position + move;
 
         if (dash.GetStatus() != Status.Spin)
             rb.MovePosition(target_pos);
         if (dash.GetStatus() == Status.Spin)
         {
-            float delta = (360f * Time.deltaTime) / dash.spinLenght;
+            float delta = (360f * Time.deltaTime) / dash.GetSpinLength();
             Quaternion deltaRotation = Quaternion.Euler(Vector3.up * delta);
             Quaternion desiredRotation = deltaRotation * rb.rotation;
-            if (Quaternion.Angle(desiredRotation, dash.initialRotation) > 0.1)
+            if (Quaternion.Angle(desiredRotation, dash.GetInitialRotation()) > 0.1)
                 rb.MoveRotation(desiredRotation);
             else
             {
                 //TEMPORARY FIX TO ROTATION BUG
-                rb.MoveRotation(dash.initialRotation);
+                rb.MoveRotation(dash.GetInitialRotation());
                 dash.SetStatus(Status.Idle);
             }
         }
@@ -83,7 +83,7 @@ public class CharMotor : MonoBehaviour
     {
         if (Mathf.Abs(mouseMovement.x) >= 0.001f || Mathf.Abs(mouseMovement.z) >= 0.001f)
         {
-            usingControllerTimer = usingControllerMax;
+            usingControllerTimer = usingControllerTimerLength;
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = Vector3.Distance(playCam.GetTfPosition(), tf.position);
 
