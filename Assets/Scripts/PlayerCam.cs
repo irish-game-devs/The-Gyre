@@ -42,4 +42,20 @@ public class PlayerCam : MonoBehaviour
     {
         tf.position = destination + playerTF.forward + cameraOffsetFromPlayer;
     }
+
+    public Vector3 MakeDirectionCamRelative(Vector3 direction)
+    {
+        Vector3 camFwdRelative = tf.forward * direction.z;
+        Vector3 camRgtRelative = tf.right * direction.x;
+
+        Vector3 camRelativeMove = camFwdRelative + camRgtRelative;
+        camRelativeMove.y = 0.0f;
+
+        return camRelativeMove;
+    }
+
+    public Vector3 GetTfPosition()
+    {
+        return tf.position;
+    }
 }

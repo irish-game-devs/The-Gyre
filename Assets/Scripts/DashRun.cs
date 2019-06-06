@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum Status
 {
@@ -16,42 +14,42 @@ public enum Status
 //[RequireComponent(typeof(CharMotor))]
 public class DashRun : MonoBehaviour
 {
+    private KeyCode dashCode = KeyCode.LeftShift;
+
     private Vector3 desiredMove = Vector3.zero;
 
     [SerializeField]
-    private float dashStrenght = 100.0f;
+    private float dashStrength = 100.0f;
     [SerializeField]
-    private float dashLenght = 0.2f;
+    private float dashTimerLength = 0.2f;
     private float dashTimer;
+    [SerializeField]
     private Vector3 dashVelocity;
-    public Vector3 dashDestination;
-
-
+    private Vector3 dashDestination;
     [SerializeField]
-    public float spinLenght = 0.2f;
-    public float spinTimer = 0.2f;
-    public Quaternion initialRotation;
+    private GameObject dashEffect;
 
     [SerializeField]
-    private float runStrenght = 2.0f;
+    private float spinTimerLength = 0.2f;
+    private float spinTimer = 0.2f;
+    private Quaternion targetRotation;
+
     [SerializeField]
-    private float runLenght = 3f;
+    private float runStrength = 2.0f;
+    [SerializeField]
+    private float runTimerLength = 3f;
     private float runTimer;
     private Vector3 runVelocity;
 
-    private float dashOrRunLenght = 0.3f;
+    [SerializeField]
+    private float dashOrRunTimerLength = 0.3f;
     private float dashOrRunTimer = 0.3f;
 
     [SerializeField]
-    private float coolDownLenght = 0.5f;
+    private float coolDownTimerLength = 0.5f;
     private float coolDownTimer = 0.5f;
-
-    [SerializeField]
-    private float runCoolDownLenght = 0.5f;
-    private float runCoolDownTimer = 0.5f;
     
     private Transform tf;
-    public GameObject dashEffect;
 
     private Status status = Status.Idle;
 
@@ -59,18 +57,18 @@ public class DashRun : MonoBehaviour
     {
         // motor = GetComponent<CharMotor>();
         tf = GetComponent<Transform>();
-        dashTimer = dashLenght;
-        coolDownTimer = coolDownLenght;
-        runTimer = runLenght;
-        runCoolDownTimer = runCoolDownLenght;
-        spinTimer = spinLenght;
-        initialRotation = tf.rotation;
+        dashTimer = dashTimerLength;
+        coolDownTimer = coolDownTimerLength;
+        runTimer = runTimerLength;
+        spinTimer = spinTimerLength;
+        targetRotation = tf.rotation;
     }
 
     private void FixedUpdate()
     {
         if (this.status == Status.Dashing)
         {
+            Debug.Log(dashEffect);
             Instantiate(dashEffect, tf.position, Quaternion.identity);
         }
     }
@@ -79,7 +77,7 @@ public class DashRun : MonoBehaviour
     {
         if (status == Status.Idle)
         {
-            dashVelocity = direction * dashStrenght;
+            dashVelocity = direction * dashStrength;
         }
     }
 
@@ -95,14 +93,13 @@ public class DashRun : MonoBehaviour
 
     public void SetDashDestination(Vector3 direction)
     {
-        dashDestination = direction * dashStrenght;
+        dashDestination = direction * dashStrength;
     }
 
-    public Status DashCheck(Vector3 desiredMove)
+    public Status StatusUpdate(Vector3 desiredMove)
     {
         this.desiredMove = desiredMove;
         Status status = this.status;
-        KeyCode dashCode = KeyCode.L;
         switch (status)
         {
             case Status.Idle:
@@ -116,9 +113,9 @@ public class DashRun : MonoBehaviour
                     else
                     {
                         status = Status.Spin;
-                        spinTimer = spinLenght;
+                        spinTimer = spinTimerLength;
 
-                        initialRotation = Quaternion.Euler(0, 360, 0) * tf.rotation;
+                        targetRotation = Quaternion.Euler(0, 360, 0) * tf.rotation;
                     }
                 }
                 break;
@@ -129,7 +126,7 @@ public class DashRun : MonoBehaviour
                 }
                 else
                 {
-                    spinTimer = spinLenght;
+                    spinTimer = spinTimerLength;
                     status = Status.Idle;
                 }
                 break;
@@ -139,13 +136,12 @@ public class DashRun : MonoBehaviour
                 if (dashOrRunTimer <= 0f && Input.GetKey(dashCode))
                 {
                     status = Status.Running;
-                    dashOrRunTimer = dashOrRunLenght;
+                    dashOrRunTimer = dashOrRunTimerLength;
                 }
                 else if (Input.GetKeyUp(dashCode))
                 {
-                    Debug.Log(Status.Dashing);
                     status = Status.Dashing;
-                    dashOrRunTimer = dashOrRunLenght;
+                    dashOrRunTimer = dashOrRunTimerLength;
 
                     Instantiate(dashEffect, tf.position, Quaternion.identity);
                     SetDashDestination(desiredMove);
@@ -160,7 +156,7 @@ public class DashRun : MonoBehaviour
                 if (dashTimer <= 0)
                 {
                     status = Status.CoolDown;
-                    dashTimer = dashLenght;
+                    dashTimer = dashTimerLength;
                 }
                 break;
             case Status.Running:
@@ -174,7 +170,7 @@ public class DashRun : MonoBehaviour
                 if (this.runTimer <= 0f || Input.GetKeyUp(dashCode))
                 {
                     status = Status.CoolDown;
-                    runTimer = runLenght;
+                    runTimer = runTimerLength;
                 }
                 break;
             case Status.CoolDown:
@@ -182,22 +178,16 @@ public class DashRun : MonoBehaviour
                     coolDownTimer -= Time.deltaTime;
                 else
                 {
-                    coolDownTimer = coolDownLenght;
-                    status = Status.Idle;
-                }
-                if (this.runCoolDownTimer >= 0)
-                    runCoolDownTimer -= Time.deltaTime;
-                else
-                {
-                    runCoolDownTimer = runCoolDownLenght;
+                    coolDownTimer = coolDownTimerLength;
                     status = Status.Idle;
                 }
                 break;
         }
+        this.status = status;
         return status;
     }
 
-    public Vector3 DashModifier(Vector3 desiredMove)//, float deltaT)
+    public Vector3 MovementModifier(Vector3 desiredMove)
     {
         Vector3 modifier = desiredMove;
         switch (status)
@@ -206,11 +196,26 @@ public class DashRun : MonoBehaviour
                 modifier += dashDestination * Time.deltaTime;
                 break;
             case Status.Running:
-                modifier *= runStrenght;
+                modifier *= runStrength;
                 break;
         }
         return modifier;
     }
+
+
+    //GETTERS
+
+    public float GetSpinLength()
+    {
+        return spinTimerLength;
+    }
+
+    public Quaternion GetInitialRotation()
+    {
+        return targetRotation;
+    }
+
+    
 }
 
 
