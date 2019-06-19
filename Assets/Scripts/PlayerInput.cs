@@ -40,6 +40,9 @@ public class PlayerInput : MonoBehaviour
         }
 
         motor.ReceiveInput(desiredMove);
+
+        if (Input.GetMouseButtonDown(0))
+            motor.PerformAttack();
     }
 
 }

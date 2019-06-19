@@ -40,7 +40,7 @@ public class KidSword : Weapon
         //on KidSword prefab setting Is Trigger = true prevents the sword to affect the physics 
         //(doesn'thit the walls/cars, doesn't push stuff around).
         //I guess it is still possible to catch the collision and inflict damage if is an enemy etc.
-        animator.SetTrigger("Base_Attack");
+        //animator.SetTrigger("Base_Attack");
 
     }
 

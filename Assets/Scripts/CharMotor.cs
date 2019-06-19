@@ -7,6 +7,7 @@ public class CharMotor : MonoBehaviour
 {    
     private Transform tf;
     private Rigidbody rb;
+    private Animator animator;
     public DashRun dash;
 
     private Vector3 desiredMove = Vector3.zero;
@@ -31,6 +32,7 @@ public class CharMotor : MonoBehaviour
         tf = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
         dash = GetComponent<DashRun>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -45,6 +47,10 @@ public class CharMotor : MonoBehaviour
 
         move = dash.MovementModifier(move);
         Vector3 target_pos = rb.position + move;
+        if (move != Vector3.zero && !animator.GetBool("moving"))
+            animator.SetBool("moving", true);
+        else if (move == Vector3.zero && animator.GetBool("moving"))
+            animator.SetBool("moving", false);
 
         if (dash.GetStatus() != Status.Spin)
             rb.MovePosition(target_pos);
@@ -71,10 +77,15 @@ public class CharMotor : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
     }
 
-    public void ReceiveInput (Vector3 desiredMove)
+    public void ReceiveInput(Vector3 desiredMove)
     {
         this.desiredMove = desiredMove;
         dash.StatusUpdate(desiredMove);
+    }
+
+    public void PerformAttack()
+    {
+        animator.SetTrigger("Base_Attack");
     }
 
 
